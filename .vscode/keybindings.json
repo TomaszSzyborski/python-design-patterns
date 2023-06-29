@@ -19,7 +19,6 @@
 
   // Global keybindings
   { "key": "ctrl+f", "command": "actions.find" },
-
   {
     "key": "alt+k",
     "command": "workbench.action.nextEditor"

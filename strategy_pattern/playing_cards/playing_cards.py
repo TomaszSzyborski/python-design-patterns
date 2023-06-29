@@ -1,5 +1,5 @@
 """
-module docstring
+Playing cards comparison strategy
 """
 import random
 from dataclasses import dataclass, field
@@ -110,7 +110,7 @@ class PlayingCard:
 
 
 def make_french_deck(
-        comparison_strategy: CardComparisonStrategy | None = None,
+    comparison_strategy: CardComparisonStrategy | None = None,
 ) -> list[PlayingCard]:
     """
     Return a list of playing cards with the given comparison strategy.
@@ -132,6 +132,7 @@ class Deck:
     """
     A deck of cards.
     """
+
     cards: list[PlayingCard] = field(default_factory=make_french_deck)
 
     def __repr__(self):
@@ -145,11 +146,12 @@ if __name__ == "__main__":
     print(queen_of_hearts)
     print(ace_of_spades)
     print(f"{ace_of_spades > queen_of_hearts=}")
-    ten_of_hearts = PlayingCard(rank=Rank.TEN,
-                                suit=Suit.HEARTS,
-                                comparison_strategy=SuitFirstComparisonStrategy())
-    king_of_clubs = PlayingCard(rank=Rank.KING,
-                                suit=Suit.CLUBS)
+    ten_of_hearts = PlayingCard(
+        rank=Rank.TEN,
+        suit=Suit.HEARTS,
+        comparison_strategy=SuitFirstComparisonStrategy(),
+    )
+    king_of_clubs = PlayingCard(rank=Rank.KING, suit=Suit.CLUBS)
     print(ten_of_hearts)
     print(king_of_clubs)
     print(f"{ten_of_hearts > king_of_clubs=}")

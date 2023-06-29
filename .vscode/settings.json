@@ -1,6 +1,6 @@
 {
   //window settings
-  "window.zoomLevel": 2,
+  "window.zoomLevel": 1,
   //explorer settings
   "explorer.sortOrder": "type",
   "explorer.compactFolders": false,
@@ -8,10 +8,14 @@
   //editor settings
   "editor.tabSize": 4,
   "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "source.organizeImports": true,
-    "source.fixAll.organizeImports": true,
-    "source.fixAll": true
+  "[python]": {
+    "gitlens.codeLens.symbolScopes": ["!Module"],
+    "editor.wordBasedSuggestions": false,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true,
+      "source.fixAll.organizeImports": true,
+      "source.fixAll": true
+    }
   },
   "editor.fontSize": 14,
   "editor.wordWrap": "on",
@@ -56,6 +60,10 @@
   "terminal.integrated.copyOnSelection": true,
   "terminal.integrated.cursorBlinking": true,
   "terminal.integrated.fontWeightBold": "bold",
+  //pytest settings
+  "python.testing.pytestArgs": ["."],
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": true,
   //files settings
   "files.trimTrailingWhitespace": true,
   "files.autoSave": "afterDelay",
@@ -83,6 +91,9 @@
   "python.analysis.typeCheckingMode": "strict",
   "python.linting.enabled": true,
   "python.languageServer": "Pylance",
-  "python.testing.pytestEnabled": true,
-  "python.formatting.provider": "black"
+  "python.formatting.provider": "black",
+  "python.defaultInterpreterPath": "./venv/bin/python",
+  "code-runner.executorMap": {
+    "python": "$pythonPath -u $fullFileName"
+  }
 }
