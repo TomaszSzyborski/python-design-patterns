@@ -2,10 +2,9 @@
 Playing cards comparison strategy
 """
 import random
+from abc import ABC
 from dataclasses import dataclass, field
 from enum import Enum
-from functools import total_ordering
-from typing import Protocol
 
 
 class Rank(Enum):
@@ -39,7 +38,7 @@ class Suit(Enum):
     SPADES = "♠"
 
 
-class CardComparisonStrategy(Protocol):
+class CardComparisonStrategy(ABC):
     """
     Comparison strategy protocol
     """
@@ -56,7 +55,7 @@ class CardComparisonStrategy(Protocol):
         ...
 
 
-class RankFirstComparisonStrategy:
+class RankFirstComparisonStrategy(CardComparisonStrategy):
     """
     Comparison strategy for the rank-first comparison method.
     """
@@ -73,17 +72,7 @@ class RankFirstComparisonStrategy:
         return list(Rank).index(rank) * len(Suit) + list(Suit).index(suit)
 
 
-class ChujDupaStrategy:
-    """
-    Comparison strategy for the rank-first comparison method.
-    """
-
-    @staticmethod
-    def sorting_index(rank: Rank, suit: Suit):
-        return 1
-
-
-class SuitFirstComparisonStrategy:
+class SuitFirstComparisonStrategy(CardComparisonStrategy):
     """
     Comparison strategy for the suit-first comparison method.
     """
@@ -120,8 +109,8 @@ class PlayingCard:
         return f"{self.suit.value}{self.rank.value}"
 
 
-def make_playing_cards_list(
-        comparison_strategy: CardComparisonStrategy = RankFirstComparisonStrategy,
+def make_french_deck(
+    comparison_strategy: CardComparisonStrategy = RankFirstComparisonStrategy,
 ) -> list[PlayingCard]:
     """
     Return a list of playing cards with the given comparison strategy.
@@ -142,7 +131,7 @@ class Deck:
     A deck of cards.
     """
 
-    cards: list[PlayingCard] = field(default_factory=make_playing_cards_list)
+    cards: list[PlayingCard] = field(default_factory=make_french_deck)
 
     def __repr__(self):
         cards = ", ".join(f"{c!s}" for c in self.cards)
@@ -150,47 +139,39 @@ class Deck:
 
 
 if __name__ == "__main__":
-    queen_of_hearts = PlayingCard(rank=Rank.QUEEN, suit=Suit.HEARTS)
-    ace_of_spades = PlayingCard(rank=Rank.ACE, suit=Suit.SPADES)
-    print(queen_of_hearts)
-    print(ace_of_spades)
-    print(f"{ace_of_spades > queen_of_hearts=}")
-    ten_of_hearts = PlayingCard(
-        rank=Rank.TEN,
-        suit=Suit.HEARTS,
-        comparison_strategy=SuitFirstComparisonStrategy(),
-    )
-    king_of_clubs = PlayingCard(rank=Rank.KING, suit=Suit.CLUBS)
-    print(ten_of_hearts)
-    print(king_of_clubs)
-    print(f"{ten_of_hearts > king_of_clubs=}")
-    print(f"{ten_of_hearts < king_of_clubs=}")
-    print(f"{king_of_clubs > ten_of_hearts=}")
-    print(f"{king_of_clubs < ten_of_hearts=}")
-
+    print(RankFirstComparisonStrategy)
+    s = RankFirstComparisonStrategy()
+    print(isinstance(s, CardComparisonStrategy))
+    print(issubclass(RankFirstComparisonStrategy, CardComparisonStrategy))
+    print(issubclass(SuitFirstComparisonStrategy, CardComparisonStrategy))
+    # queen_of_hearts = PlayingCard(rank=Rank.QUEEN, suit=Suit.HEARTS)
+    # ace_of_spades = PlayingCard(rank=Rank.ACE, suit=Suit.SPADES)
+    # print(queen_of_hearts)
+    # print(ace_of_spades)
+    # print(f"{ace_of_spades > queen_of_hearts=}")
+    # ten_of_hearts = PlayingCard(
+    #     rank=Rank.TEN,
+    #     suit=Suit.HEARTS,
+    #     comparison_strategy=SuitFirstComparisonStrategy(),
+    # )
+    # king_of_clubs = PlayingCard(rank=Rank.KING, suit=Suit.CLUBS)
+    # print(ten_of_hearts)
+    # print(king_of_clubs)
+    # print(f"{ten_of_hearts > king_of_clubs=}")
+    # print(f"{ten_of_hearts < king_of_clubs=}")
+    # print(f"{king_of_clubs > ten_of_hearts=}")
+    # print(f"{king_of_clubs < ten_of_hearts=}")
+    #
     print("Suit First Comparison")
-    # french_deck = make_playing_cards_list(SuitFirstComparisonStrategy)
-    french_deck = make_playing_cards_list(SuitFirstComparisonStrategy())
+    french_deck = make_french_deck(SuitFirstComparisonStrategy())
     random.shuffle(french_deck)
     deck = Deck(french_deck)
     print(deck)
-    french_deck.sort()
-    deck = Deck(french_deck)
+    deck = Deck(sorted(french_deck))
     print(deck)
 
     print("Rank First Comparison")
-    # french_deck = make_playing_cards_list(RankFirstComparisonStrategy)
-    french_deck = make_playing_cards_list(RankFirstComparisonStrategy())
-    random.shuffle(french_deck)
-    deck = Deck(french_deck)
-    print(deck)
-    french_deck.sort()
-    deck = Deck(french_deck)
-    print(deck)
-
-    print("ChujDupa Comparison")
-    # french_deck = make_playing_cards_list(RankFirstComparisonStrategy)
-    french_deck = make_playing_cards_list(ChujDupaStrategy())
+    french_deck = make_french_deck(RankFirstComparisonStrategy())
     random.shuffle(french_deck)
     deck = Deck(french_deck)
     print(deck)
